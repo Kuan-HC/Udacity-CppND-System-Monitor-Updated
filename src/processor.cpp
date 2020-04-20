@@ -1,4 +1,5 @@
 #include "processor.h"
+#define EPSILION 0.000001
 
 Processor::Processor() {
   PrevTotal = LinuxParser::Jiffies();
@@ -12,13 +13,13 @@ float Processor::Utilization()
   float Idle = LinuxParser::IdleJiffies();
   float Cpu_Utilization = 0;
 
-  if ((Total - PrevTotal)!=0)
+  if ((Total - PrevTotal)< EPSILION)
   {
-   Cpu_Utilization = ((Total - PrevTotal) - (Idle - PrevIdle)) / (Total - PrevTotal);
+    Cpu_Utilization = 0;
   }
   else
   {
-    Cpu_Utilization = 0;
+    Cpu_Utilization = ((Total - PrevTotal) - (Idle - PrevIdle)) / (Total - PrevTotal);    
   }
   
   /* update previous total and idle value */  

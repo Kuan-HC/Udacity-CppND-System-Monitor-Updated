@@ -2,9 +2,9 @@
 #include <iomanip>  /* Fill number with digit 0 */
 #include "format.h"
 
-#define MINSEC 60;
-#define HOURMIN 60;
-#define HOURSEC 3600;
+#define MINSEC 60
+#define HOURMIN 60
+#define HOURSEC 3600
 
 using std::string;
 
