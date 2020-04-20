@@ -25,7 +25,7 @@ std::string System::Kernel()
     return Kernel_Num == "Unknown"? Kernel_Num = LinuxParser::Kernel():Kernel_Num;
 }
 
-// TODO: Return the system's memory utilization
+// TODO: (Done) Return the system's memory utilization
 float System::MemoryUtilization()
 {
     return LinuxParser::MemoryUtilization();

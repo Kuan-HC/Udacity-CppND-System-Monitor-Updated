@@ -28,6 +28,7 @@ std::string OperatingSystem();
 std::string Kernel();
 /* Helper Functions */
 int FilterValue(std::string target_key);
+std::vector<long> Jiffies_Arr();
 
 // CPU
 enum CPUStates {

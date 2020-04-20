@@ -84,8 +84,7 @@ float LinuxParser::MemoryUtilization()
         else
         {
           /* do nothing */
-        }
-        
+        }        
       }
     }
   }
@@ -107,7 +106,13 @@ long LinuxParser::UpTime()
 }
 
 // TODO: Read and return the number of jiffies for the system
-long LinuxParser::Jiffies() { return 0; }
+long LinuxParser::Jiffies()
+{
+  std::vector<long> cpu_data = Jiffies_Arr();
+    
+   return cpu_data[kUser_] + cpu_data[kNice_] + cpu_data[kSystem_] + cpu_data[kIdle_]
+        + cpu_data[kIOwait_] + cpu_data[kIRQ_] + cpu_data[kSoftIRQ_] + cpu_data[kSteal_];
+}
 
 // TODO: Read and return the number of active jiffies for a PID
 // REMOVE: [[maybe_unused]] once you define the function
@@ -117,29 +122,16 @@ long LinuxParser::ActiveJiffies(int pid[[maybe_unused]]) { return 0; }
 long LinuxParser::ActiveJiffies() { return 0; }
 
 // TODO: Read and return the number of idle jiffies for the system
-long LinuxParser::IdleJiffies() { return 0; }
+long LinuxParser::IdleJiffies()
+{
+  std::vector<long> cpu_data = Jiffies_Arr();
+
+  return cpu_data[kIdle_] + cpu_data[kIOwait_];
+
+}
 
 // TODO: Read and return CPU utilization
 vector<string> LinuxParser::CpuUtilization() { return {}; }
-
-/* Helpler Function */
-int LinuxParser::FilterValue(string target_key) {
-  string line, key;
-  int value;
-  std::ifstream stream(kProcDirectory + kStatFilename);
-  if (stream.is_open()) {
-    while (std::getline(stream, line)) {
-      std::istringstream linestream(line);
-      while (linestream >> key >> value) {
-        if (key == target_key) {
-          return value;
-        }
-      }
-    }
-  }
-  return value;
-}
-
 
 // TODO: (Done) Read and return the total number of processes
 int LinuxParser::TotalProcesses()
@@ -172,3 +164,47 @@ string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::UpTime(int pid[[maybe_unused]]) { return 0; }
+
+/* Helpler Function */
+int LinuxParser::FilterValue(string target_key) {
+  string line, key;
+  int value;
+  std::ifstream stream(kProcDirectory + kStatFilename);
+  if (stream.is_open()) {
+    while (std::getline(stream, line)) {
+      std::istringstream linestream(line);
+      while (linestream >> key >> value) {
+        if (key == target_key) {
+          return value;
+        }
+      }
+    }
+  }
+  return value;
+}
+
+std::vector<long> LinuxParser::Jiffies_Arr()
+{
+  string line, key;
+  long value_1, value_2, value_3, value_4, value_5, value_6, value_7, value_8,value_9, value_10;
+  std::vector<long> tmp_cpu(10,0);
+
+  std::ifstream stream(kProcDirectory + kStatFilename);
+  if (stream.is_open()) {
+    while (std::getline(stream, line)) {
+      std::istringstream linestream(line);
+      while (linestream >> key ) {
+        if (key == "cpu") {
+          linestream >> value_1 >> value_2 >> value_3 >> value_4 >> value_5 >>
+                        value_6 >> value_7 >> value_8 >> value_9 >> value_10;
+      
+          tmp_cpu = {value_1 , value_2 , value_3 , value_4 , value_5 , value_6 ,
+                     value_7 , value_8 , value_9 , value_10};
+          return tmp_cpu;
+      }
+    }  
+  }
+  
+}
+return tmp_cpu;
+}
