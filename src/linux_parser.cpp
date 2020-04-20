@@ -67,7 +67,30 @@ vector<int> LinuxParser::Pids() {
 }
 
 // TODO: Read and return the system memory utilization
-float LinuxParser::MemoryUtilization() { return 0.0; }
+float LinuxParser::MemoryUtilization()
+{
+  string line, mem_key; 
+  double total, free, value;
+  std::ifstream stream(kProcDirectory + kMeminfoFilename);
+  if (stream.is_open()) {
+    while (std::getline(stream, line)) {
+      std::istringstream linestream(line);
+      while (linestream >> mem_key >> value) {
+        if (mem_key == "MemTotal:") {
+          total = value;
+        } else if (mem_key == "MemFree:") {
+          free = value;
+        }
+        else
+        {
+          /* do nothing */
+        }
+        
+      }
+    }
+  }
+  return static_cast<float>((total - free) /total); /* transfer to percentage */
+}
 
 // TODO: (Done) Read and return the system uptime
 long LinuxParser::UpTime()
@@ -99,11 +122,36 @@ long LinuxParser::IdleJiffies() { return 0; }
 // TODO: Read and return CPU utilization
 vector<string> LinuxParser::CpuUtilization() { return {}; }
 
-// TODO: Read and return the total number of processes
-int LinuxParser::TotalProcesses() { return 0; }
+/* Helpler Function */
+int LinuxParser::FilterValue(string target_key) {
+  string line, key;
+  int value;
+  std::ifstream stream(kProcDirectory + kStatFilename);
+  if (stream.is_open()) {
+    while (std::getline(stream, line)) {
+      std::istringstream linestream(line);
+      while (linestream >> key >> value) {
+        if (key == target_key) {
+          return value;
+        }
+      }
+    }
+  }
+  return value;
+}
+
+
+// TODO: (Done) Read and return the total number of processes
+int LinuxParser::TotalProcesses()
+{
+  return FilterValue("processes");
+}
 
 // TODO: Read and return the number of running processes
-int LinuxParser::RunningProcesses() { return 0; }
+int LinuxParser::RunningProcesses()
+{
+  return FilterValue("procs_running");
+}
 
 // TODO: Read and return the command associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
