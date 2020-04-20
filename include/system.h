@@ -6,6 +6,7 @@
 
 #include "process.h"
 #include "processor.h"
+#include "linux_parser.h" /* to use function in namespace LinuxParser */
 
 class System {
  public:
@@ -22,6 +23,9 @@ class System {
  private:
   Processor cpu_ = {};
   std::vector<Process> processes_ = {};
+  /* add variable to store system info */
+  std::string OS_Name{"Unknown"};
+  std::string Kernel_Num{"Unknown"};
 };
 
 #endif
