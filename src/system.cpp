@@ -20,16 +20,14 @@ Processor& System::Cpu() { return cpu_; }
 vector<Process>& System::Processes()
 {
     /**************************************************************
-     * Vector processes_ would first remove all element than
+     * Vector processes_ ; first remove all element than
      * instantiate new obj with pid from LinuxParser::Pids()
      * ************************************************************/
     processes_.clear();
     std::vector<int> item = LinuxParser::Pids();
-    for (int pid : item){
-        /* to intantiate obj with pid, need to create constructor in class Process */
-        processes_.emplace_back(Process(pid));
+    for (int pid : item){        
+        processes_.emplace_back(Process(pid));  /* to intantiate obj with pid, need to create constructor in class Process in Process.h */
     }
-
       
     return processes_;
 }
@@ -55,7 +53,9 @@ std::string System::OperatingSystem()
 // TODO: (done) Return the number of processes actively running on the system
 int System::RunningProcesses()
 {
-    return LinuxParser::RunningProcesses();
+    //return LinuxParser::RunningProcesses();
+    std::vector<int> item = LinuxParser::Pids();
+    return item[0];
 }
 
 // TODO: (Done) Return the total number of processes on the system
