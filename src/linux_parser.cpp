@@ -159,7 +159,8 @@ long LinuxParser::IdleJiffies()
   return cpu_data[kIdle_] + cpu_data[kIOwait_];
 }
 
-// TODO: Read and return CPU utilization
+// TODO: (Done)Read and return CPU utilization
+/* Not use in this project */
 vector<string> LinuxParser::CpuUtilization() { return {}; }
 
 // TODO: (Done) Read and return the total number of processes
@@ -168,7 +169,7 @@ int LinuxParser::TotalProcesses()
   return FilterValue("processes");
 }
 
-// TODO: Read and return the number of running processes
+// TODO: (Done) Read and return the number of running processes
 int LinuxParser::RunningProcesses()
 {
   return FilterValue("procs_running");
@@ -180,14 +181,11 @@ string LinuxParser::Command(int pid)
 {
   string output, line;
   std::ifstream filestream(kProcDirectory+to_string(pid)+kCmdlineFilename);
-  if (filestream.is_open()) {
+  if (filestream.is_open())
+  {
     if(getline(filestream, line))
     {
       output = line; 
-    }
-    else
-    {
-      output = "Error! Please Check File: cat /proc/pid/cmdline";
     }
   }  
   return output;
@@ -195,9 +193,29 @@ string LinuxParser::Command(int pid)
 
 // TODO: Read and return the memory used by a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Ram(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::Ram(int pid[[maybe_unused]])
+{
+  string line,key;
+  string output = "0";
+  long value; 
+  std::ifstream filestream(kProcDirectory+to_string(pid)+kStatusFilename);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)){
+      
+      std::istringstream linestream(line);
+      while (linestream >> key >> value) {
+      
+        if (key == "VmData:"){ 
+          int tmp= value/1024; 
+          return to_string(tmp);
+        }
+      }    
+    }
+  }
+  return output;  
+}
 
-// TODO: (test) Read and return the user ID associated with a process
+// TODO: (Done) Read and return the user ID associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
 int LinuxParser::Uid(int pid)
 {
@@ -216,7 +234,7 @@ int LinuxParser::Uid(int pid)
   return 0U; 
 }
 
-// TODO: (test) Read and return the user associated with a process
+// TODO: (Done) Read and return the user associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::User(int UID)
 {
@@ -230,12 +248,12 @@ string LinuxParser::User(int UID)
       string::size_type position = line.find(target_key);
       if (position != line.npos)
       { 
-          line.substr(0,position-1); 
+          line = line.substr(0,position-1); 
           return line;
       }
     }
   }
-  return line;
+  return line; /* default: Fail to get User */
 }
 
 // TODO: (Done) Read and return the uptime of a process
@@ -258,7 +276,7 @@ long LinuxParser::UpTime(int pid)
     }
     else
     {
-      time = "-1";
+      time = "-1"; /* for debug */
     }
   }  
   return stol(time);;
@@ -305,5 +323,5 @@ std::vector<long> LinuxParser::Jiffies_Arr()
     }  
   } 
  }
-return tmp_cpu;
+ return tmp_cpu;
 }

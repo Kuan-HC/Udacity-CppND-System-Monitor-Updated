@@ -28,8 +28,8 @@ float Process::CpuUtilization()
     /*******************************************************************************************************************************************
          https://stackoverflow.com/questions/3017162/how-to-get-total-cpu-usage-in-linux-using-c/3017438#3017438
 
-        ACTIVE_TIME = ActiveTimeTotal() - previous GetActiveTimeTotal();
-        IDLE_TIME   = GetIdleTimeTotal() - previous GetIdleTimeTotal();
+        ACTIVE_TIME = ActiveTimeTotal() - previous ActiveTimeTotal();
+        IDLE_TIME   = GetIdleTimeTotal() - previous IdleTimeTotal();
         TOTAL_TIME  = ACTIVE_TIME + IDLE_TIME;
         int usage = 100.f * ACTIVE_TIME / TOTAL_TIME;
         std::cout << "total cpu usage: " << usage << std::endl;
@@ -41,7 +41,7 @@ float Process::CpuUtilization()
 
     if ((now_total - prev_total) == 0)
     {
-        Cpu_Utilization = 0.0f;
+        Cpu_Utilization = -0.1f;
     }
     else
     {
