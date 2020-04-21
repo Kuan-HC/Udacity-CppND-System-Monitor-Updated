@@ -9,6 +9,7 @@ using std::stof;
 using std::string;
 using std::to_string;
 using std::vector;
+using std::stol;
 
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::OperatingSystem() {
@@ -111,18 +112,44 @@ long LinuxParser::UpTime()
 // TODO: Read and return the number of jiffies for the system
 long LinuxParser::Jiffies()
 {
-  std::vector<long> cpu_data = Jiffies_Arr();
-    
-   return cpu_data[kUser_] + cpu_data[kNice_] + cpu_data[kSystem_] + cpu_data[kIdle_]
-        + cpu_data[kIOwait_] + cpu_data[kIRQ_] + cpu_data[kSoftIRQ_] + cpu_data[kSteal_];
+  return ActiveJiffies() + IdleJiffies();
 }
 
-// TODO: Read and return the number of active jiffies for a PID
+// TODO: (Done) Read and return the number of active jiffies for a PID
 // REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::ActiveJiffies(int pid[[maybe_unused]]) { return 0; }
+long LinuxParser::ActiveJiffies(int pid)
+{
+  /*******************************************************************************************************************************************
+   * https://stackoverflow.com/questions/16726779/how-do-i-get-the-total-cpu-usage-of-an-application-from-proc-pid-stat/16736599#16736599
+   * meaning of each value:
+   * https://web.archive.org/web/20130302063336/http://www.lindevdoc.org/wiki//proc/pid/stat
+   * 
+   * target: return the sum of: 
+   * utime + stime + cutime + cstime    locate in position 14 - 17
+   * *****************************************************************************************************************************************/
+  string line;
+  string pid,utime, stime, cutime, cstime;
+
+  std::ifstream filestream(kProcDirectory+to_string(pid)+kStatFilename);
+  if (filestream.is_open()) {
+    std::getline(filestream, line);
+    std::istringstream linestream(line);
+    linestream >> pid;
+    for (int i = 0; i <= 3; i++)
+    {
+      linestream >> utime >> stime>> cutime >>cstime;
+    }
+
+  return stol(utime)+stol(stime)+stol(cutime)+stol(stime);
+}
 
 // TODO: Read and return the number of active jiffies for the system
-long LinuxParser::ActiveJiffies() { return 0; }
+long LinuxParser::ActiveJiffies() 
+{
+  std::vector<long> cpu_data = Jiffies_Arr();
+
+  return cpu_data[kUser_] + cpu_data[kNice_] + cpu_data[kSystem_] + cpu_data[kIRQ_] + cpu_data[kSoftIRQ_] + cpu_data[kSteal_];
+}
 
 // TODO: Read and return the number of idle jiffies for the system
 long LinuxParser::IdleJiffies()
@@ -130,7 +157,6 @@ long LinuxParser::IdleJiffies()
   std::vector<long> cpu_data = Jiffies_Arr();
 
   return cpu_data[kIdle_] + cpu_data[kIOwait_];
-
 }
 
 // TODO: Read and return CPU utilization
