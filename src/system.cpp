@@ -30,8 +30,8 @@ vector<Process>& System::Processes()
         processes_.emplace_back(Process(pid));  /* to intantiate obj with pid, need to create constructor in class Process in Process.h */
     }
       
-    std::sort(processes_.begin(),processes_.end(),std::greater<Process>());
-    
+    std::sort(processes_.begin(),processes_.end());
+
     return processes_;
 }
 
@@ -53,7 +53,7 @@ std::string System::OperatingSystem()
     return OS_Name == "Unknown"? (OS_Name = LinuxParser::OperatingSystem()):OS_Name;
 }
 
-// TODO: (done) Return the number of processes actively running on the system
+// TODO: (Done) Return the number of processes actively running on the system
 int System::RunningProcesses()
 {
     //return LinuxParser::RunningProcesses();
