@@ -203,7 +203,25 @@ string LinuxParser::Uid(int pid[[maybe_unused]]) { return string(); }
 
 // TODO: Read and return the user associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::User(int pid)
+{
+  string line = "Fail to get User";
+  string target_key = "x:" + to_string(pid);
+
+  std::ifstream filestream(kPasswordPath);  
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line))
+     {
+      string::size_type position = line.find(target_key);
+
+      if (position != line.npos)
+      { 
+          line.substr(0,position-1); 
+      }
+    }
+  }
+  return line;
+}
 
 // TODO: (Done) Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
@@ -215,6 +233,11 @@ long LinuxParser::UpTime(int pid)
     if(getline(filestream, line))
     {
       std::istringstream linestream(line);
+
+    /**********************************************************************************************
+     * https://web.archive.org/web/20130302063336/http://www.lindevdoc.org/wiki//proc/pid/stat    *
+     * NO.22 time when the process started, measured in nanoseconds since the system boot           *
+     * ********************************************************************************************/
       for (int i=0; i<22;i++)
       linestream >> time; 
     }
