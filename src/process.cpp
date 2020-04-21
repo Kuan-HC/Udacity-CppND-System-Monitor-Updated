@@ -48,9 +48,10 @@ float Process::CpuUtilization()
         Cpu_Utilization = static_cast<float>(now_active - prev_active) / (now_total - prev_total);    
     }
   
-    /* update previous total and idle value */  
+    /* update previous total, idle value and private number cpu_load  */  
     prev_active = now_active;
     prev_total = now_total;
+    cpu_load = Cpu_Utilization;
         
     return Cpu_Utilization;
 }
