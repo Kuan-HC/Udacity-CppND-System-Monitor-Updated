@@ -13,7 +13,7 @@ using std::vector;
 Process::Process(int pid)
 {
     pid_num = pid;
-    cpu_load = CpuUtilization()
+    cpu_load = CpuUtilization();
 }
 
 // TODO: Return this process's ID
