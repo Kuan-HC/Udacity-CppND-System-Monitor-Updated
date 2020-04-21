@@ -1,4 +1,5 @@
 #include "processor.h"
+#define EPSILON 0.000001
 
 Processor::Processor() {
   PrevTotal = LinuxParser::Jiffies();
@@ -8,17 +9,17 @@ Processor::Processor() {
 // TODO: (Done)Return the aggregate CPU utilization
 float Processor::Utilization()
 {
-  long Total = LinuxParser::Jiffies();
-  long Idle = LinuxParser::IdleJiffies();
+  float Total = static_cast<float>(LinuxParser::Jiffies());
+  float Idle =  static_cast<float>(LinuxParser::IdleJiffies());
   float Cpu_Utilization = 0;
 
-  if ((Total - PrevTotal) == 0)
+  if ((Total - PrevTotal) < EPSILON)
   {
     Cpu_Utilization = 0.0f;
   }
   else
   {
-    Cpu_Utilization = static_cast<float>(((Total - PrevTotal) - (Idle - PrevIdle)) / (Total - PrevTotal));    
+    Cpu_Utilization = ((Total - PrevTotal) - (Idle - PrevIdle)) / (Total - PrevTotal);    
   }
   
   /* update previous total and idle value */  

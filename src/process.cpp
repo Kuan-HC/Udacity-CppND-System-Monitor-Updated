@@ -11,6 +11,8 @@ using std::string;
 using std::to_string;
 using std::vector;
 
+#define EPSILON 0.000001
+
 Process::Process(int pid)
 {
     pid_num = pid;
@@ -35,17 +37,17 @@ float Process::CpuUtilization()
         std::cout << "total cpu usage: " << usage << std::endl;
    * 
    * *******************************************************************************************************************************************/
-    long now_active = LinuxParser::ActiveJiffies(pid_num);
-    long now_total = LinuxParser::Jiffies();
-    float Cpu_Utilization = 0;
+    float now_active = static_cast<float>(LinuxParser::ActiveJiffies(pid_num));
+    float now_total = static_cast<float>(LinuxParser::Jiffies());
+    float Cpu_Utilization = 0.0f;
 
-    if ((now_total - prev_total) == 0U)
+    if ((now_total - prev_total) < EPSILON)
     {
-        Cpu_Utilization = 0;
+        Cpu_Utilization = 0.0f;
      }
     else
     {
-        Cpu_Utilization = static_cast<float>(now_active - prev_active) / (now_total - prev_total);    
+        Cpu_Utilization = (now_active - prev_active) / (now_total - prev_total);    
     }
   
     /* update previous total and idle value */  
