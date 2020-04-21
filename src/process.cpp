@@ -61,8 +61,12 @@ string Process::Command() { return LinuxParser::Command(pid_num); }
 // TODO: Return this process's memory utilization
 string Process::Ram() { return LinuxParser::Ram(pid_num); }
 
-// TODO: Return the user (name) that generated this process
-string Process::User() { return LinuxParser::User(pid_num); }
+// TODO: (test)Return the user (name) that generated this process
+string Process::User()
+{
+    int tmp = LinuxParser::Uid(pid_num);
+    return LinuxParser::User(tmp);
+}
 
 // TODO: Return the age of this process (in seconds)
 long int Process::UpTime() { return LinuxParser::UpTime(pid_num); }
