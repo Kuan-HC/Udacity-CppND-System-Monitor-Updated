@@ -67,7 +67,7 @@ vector<int> LinuxParser::Pids() {
   return pids;
 }
 
-// TODO: Read and return the system memory utilization
+// TODO: (DONE) Read and return the system memory utilization
 float LinuxParser::MemoryUtilization()
 {
   string line, mem_key; 
@@ -109,7 +109,7 @@ long LinuxParser::UpTime()
   return time;
 }
 
-// TODO: Read and return the number of jiffies for the system
+// TODO: (DONE) Read and return the number of jiffies for the system
 long LinuxParser::Jiffies()
 {
   return ActiveJiffies() + IdleJiffies();
@@ -143,7 +143,7 @@ long LinuxParser::ActiveJiffies(int pid)
   return (stol(utime)+stol(stime)+stol(cutime)+stol(stime));
 }
 
-// TODO: Read and return the number of active jiffies for the system
+// TODO: (DONE) Read and return the number of active jiffies for the system
 long LinuxParser::ActiveJiffies() 
 {
   std::vector<long> cpu_data = Jiffies_Arr();
@@ -151,7 +151,7 @@ long LinuxParser::ActiveJiffies()
   return cpu_data[kUser_] + cpu_data[kNice_] + cpu_data[kSystem_] + cpu_data[kIRQ_] + cpu_data[kSoftIRQ_] + cpu_data[kSteal_];
 }
 
-// TODO: Read and return the number of idle jiffies for the system
+// TODO: (DONE) Read and return the number of idle jiffies for the system
 long LinuxParser::IdleJiffies()
 {
   std::vector<long> cpu_data = Jiffies_Arr();
@@ -174,9 +174,24 @@ int LinuxParser::RunningProcesses()
   return FilterValue("procs_running");
 }
 
-// TODO: Read and return the command associated with a process
+// TODO: (Done) Read and return the command associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Command(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::Command(int pid)
+{
+  string output, line;
+  std::ifstream filestream(kProcDirectory+to_string(pid)+kCmdlineFilename);
+  if (filestream.is_open()) {
+    if(getline(filestream, line))
+    {
+      output = line; 
+    }
+    else
+    {
+      output = "Can't Found Command";
+    }
+  }  
+  return output;
+}
 
 // TODO: Read and return the memory used by a process
 // REMOVE: [[maybe_unused]] once you define the function

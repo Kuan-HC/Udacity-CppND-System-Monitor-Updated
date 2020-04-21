@@ -3,6 +3,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include "process.h"
 #include "processor.h"
@@ -29,6 +30,8 @@ vector<Process>& System::Processes()
         processes_.emplace_back(Process(pid));  /* to intantiate obj with pid, need to create constructor in class Process in Process.h */
     }
       
+    std::sort(processes_.begin(),processes_.end(),std::greater<Process>());
+    
     return processes_;
 }
 
