@@ -14,7 +14,7 @@ using std::vector;
 Process::Process(int pid)
 {
     pid_num = pid;
-    cpu_load = Process::CpuUtilization();
+    cpu_load = CpuUtilization();
     prev_active = LinuxParser::ActiveJiffies(pid_num);
     prev_total = LinuxParser::Jiffies();
 }
@@ -45,7 +45,7 @@ float Process::CpuUtilization()
      }
     else
     {
-        Cpu_Utilization = static_assert<float>(now_active - prev_active) / (now_total - prev_total);    
+        Cpu_Utilization = static_cast<float>(now_active - prev_active) / (now_total - prev_total);    
     }
   
     /* update previous total and idle value */  

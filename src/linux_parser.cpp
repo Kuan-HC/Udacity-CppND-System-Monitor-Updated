@@ -128,19 +128,20 @@ long LinuxParser::ActiveJiffies(int pid)
    * utime + stime + cutime + cstime    locate in position 14 - 17
    * *****************************************************************************************************************************************/
   string line;
-  string pid,utime, stime, cutime, cstime;
+  string pid_name,utime, stime, cutime, cstime;
 
   std::ifstream filestream(kProcDirectory+to_string(pid)+kStatFilename);
   if (filestream.is_open()) {
     std::getline(filestream, line);
     std::istringstream linestream(line);
-    linestream >> pid;
+    linestream >> pid_name;
     for (int i = 0; i <= 3; i++)
     {
       linestream >> utime >> stime>> cutime >>cstime;
     }
 
-  return stol(utime)+stol(stime)+stol(cutime)+stol(stime);
+  return (stol(utime)+stol(stime)+stol(cutime)+stol(stime));
+  }
 }
 
 // TODO: Read and return the number of active jiffies for the system
@@ -232,8 +233,7 @@ std::vector<long> LinuxParser::Jiffies_Arr()
           return tmp_cpu;
       }
     }  
-  }
-  
-}
+  } 
+ }
 return tmp_cpu;
 }
