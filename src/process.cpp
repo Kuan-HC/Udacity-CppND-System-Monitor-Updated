@@ -39,7 +39,7 @@ float Process::CpuUtilization()
     long now_total = LinuxParser::Jiffies();
     float Cpu_Utilization = 0.0f;
 
-    if ((now_total - prev_total) < EPSILON)
+    if ((now_total - prev_total) == 0)
     {
         Cpu_Utilization = 0.0f;
     }

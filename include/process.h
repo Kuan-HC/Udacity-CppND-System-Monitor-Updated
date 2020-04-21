@@ -21,7 +21,8 @@ class Process {
  private:
  int pid_num{0};
  int cpu_load{0};
- long prev_total, prev_active;
+ long prev_total{0};
+ long prev_active{0};
 };
 
 #endif
