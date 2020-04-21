@@ -41,7 +41,7 @@ float Process::CpuUtilization()
 
     if ((now_total - prev_total) == 0)
     {
-        Cpu_Utilization = -0.1f;
+        Cpu_Utilization = 0.0f;
     }
     else
     {
