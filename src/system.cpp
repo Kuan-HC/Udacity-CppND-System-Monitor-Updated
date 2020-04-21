@@ -17,7 +17,22 @@ using std::vector;
 Processor& System::Cpu() { return cpu_; }
 
 // TODO: Return a container composed of the system's processes
-vector<Process>& System::Processes() { return processes_; }
+vector<Process>& System::Processes()
+{
+    /**************************************************************
+     * Vector processes_ would first remove all element than
+     * instantiate new obj with pid from LinuxParser::Pids()
+     * ************************************************************/
+    processes_.clear();
+    std::vector<int> item = LinuxParser::Pids();
+    for (int pid : item){
+        /* to intantiate obj with pid, need to create constructor in class Process */
+        processes_.emplace_back(Process(pid));
+    }
+
+      
+    return processes_;
+}
 
 // TODO: (Done) Return the system's kernel identifier (string)
 std::string System::Kernel()

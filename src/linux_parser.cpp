@@ -76,9 +76,12 @@ float LinuxParser::MemoryUtilization()
     while (std::getline(stream, line)) {
       std::istringstream linestream(line);
       while (linestream >> mem_key >> value) {
-        if (mem_key == "MemTotal:") {
+        if (mem_key == "MemTotal:")
+        {
           total = value;
-        } else if (mem_key == "MemFree:") {
+        }
+        else if (mem_key == "MemFree:")
+        {
           free = value;
         }
         else

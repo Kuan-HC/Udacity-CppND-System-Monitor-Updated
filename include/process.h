@@ -15,9 +15,12 @@ class Process {
   std::string Ram();                       // TODO: See src/process.cpp
   long int UpTime();                       // TODO: See src/process.cpp
   bool operator<(Process const& a) const;  // TODO: See src/process.cpp
+  Process(int pid);                        // was called in linux_parser.cpp
 
   // TODO: Declare any necessary private members
  private:
+ int pid_num{0};
+ int cpu_load{0};
 };
 
 #endif
