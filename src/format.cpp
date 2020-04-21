@@ -1,6 +1,7 @@
-#include <string>
-#include <iomanip>  /* Fill number with digit 0 */
 #include "format.h"
+
+#include <iomanip> /* Fill number with digit 0 */
+#include <string>
 
 #define MINSEC 60
 #define HOURMIN 60
@@ -12,18 +13,17 @@ using std::string;
 // INPUT: Long int measuring seconds
 // OUTPUT: HH:MM:SS
 // REMOVE: [[maybe_unused]] once you define the function
-string Format::ElapsedTime(long seconds)
-{     
-    unsigned int seconds_ = seconds % MINSEC;
-    unsigned int minutes_ = seconds % HOURSEC;
-    minutes_ /= HOURMIN;
-    unsigned int hours_   = seconds / HOURSEC; 
+string Format::ElapsedTime(long seconds) {
+  unsigned int seconds_ = seconds % MINSEC;
+  unsigned int minutes_ = seconds % HOURSEC;
+  minutes_ /= HOURMIN;
+  unsigned int hours_ = seconds / HOURSEC;
 
-    std::stringstream output;
+  std::stringstream output;
 
-    output << std::setw(2) << std::setfill('0') << hours_ << ":";
-    output << std::setw(2) << std::setfill('0') <<  minutes_ << ":";  
-    output << std::setw(2) << std::setfill('0') << seconds_; 
+  output << std::setw(2) << std::setfill('0') << hours_ << ":";
+  output << std::setw(2) << std::setfill('0') << minutes_ << ":";
+  output << std::setw(2) << std::setfill('0') << seconds_;
 
-    return output.str();
+  return output.str();
 }

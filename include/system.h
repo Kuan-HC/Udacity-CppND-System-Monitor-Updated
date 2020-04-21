@@ -4,9 +4,9 @@
 #include <string>
 #include <vector>
 
+#include "linux_parser.h" /* to use function in namespace LinuxParser */
 #include "process.h"
 #include "processor.h"
-#include "linux_parser.h" /* to use function in namespace LinuxParser */
 
 class System {
  public:
