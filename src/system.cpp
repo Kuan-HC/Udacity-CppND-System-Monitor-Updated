@@ -28,8 +28,8 @@ vector<Process>& System::Processes() {
   processes_.clear();
   std::vector<int> item = LinuxParser::Pids();
   for (int pid : item) {
-    processes_.emplace_back(
-        Process(pid)); /* to intantiate obj with pid, need to create constructor in class Process in Process.h */
+    /* to intantiate obj with pid, need to create constructor in class Process in Process.h */
+    processes_.emplace_back(Process(pid));     
   }
   std::sort(processes_.begin(), processes_.end());
   return processes_;
