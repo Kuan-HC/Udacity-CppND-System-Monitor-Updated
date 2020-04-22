@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include <unistd.h>
 
+
 #include <string>
 #include <vector>
 
@@ -149,7 +150,43 @@ long LinuxParser::IdleJiffies() {
 
 // TODO: (Done)Read and return CPU utilization
 /* Not use in this project */
-vector<string> LinuxParser::CpuUtilization() { return {}; }
+vector<string> LinuxParser::CpuUtilization()
+{ 
+    string line;
+    std::ifstream filestream(kProcDirectory + to_string(pid) + kStatFilename);
+    //std::string path =  kProcDirectory + to_string(pid) + kStatFilename;
+    // std::ifstream stream;
+    // Util::getStream(path, stream);
+    string line;
+    
+    if (filestream.is_open()) {
+    //while (std::getline(filestream, line)) {
+      std::getline(filestream, line); // file contains only one line    
+    
+      std::istringstream buffer(line);
+      std::istream_iterator<string> beginning(buffer), end;
+      std::vector<string> line_content(beginning, end);
+      float utime = LinuxParser::UpTime(pid);
+      float stime = stof(line_content[14]);
+      float cutime = stof(line_content[15]);
+      float cstime = stof(line_content[16]);
+      float starttime = stof(line_content[222]);   /* was 21 */
+      float uptime = LinuxParser::UpTime();
+      float freq = sysconf(_SC_CLK_TCK);
+      float total_time = utime + stime + cutime + cstime;
+      float seconds = uptime - (starttime / freq);
+      float result = 100.0 * ((total_time / freq) / seconds);
+      return (result);
+  /****************************************************************************************************************************************
+   * https://stackoverflow.com/questions/16726779/how-do-i-get-the-total-cpu-usage-of-an-application-from-proc-pid-stat/16736599#16736599
+   * 
+   *  #14 utime - CPU time spent in user code, measured in clock ticks
+      #15 stime - CPU time spent in kernel code, measured in clock ticks
+      #16 cutime - Waited-for children's CPU time spent in user code (in clock ticks)
+      #17 cstime - Waited-for children's CPU time spent in kernel code (in clock ticks)
+      #22 starttime - Time when the process started, measured in clock ticks
+  *******************************************************************************************************************************************/
+}
 
 // TODO: (Done) Read and return the total number of processes
 int LinuxParser::TotalProcesses() { return FilterValue("processes"); }
@@ -242,8 +279,11 @@ long LinuxParser::UpTime(int pid) {
        * * NO.22 time when the process started, measured in nanoseconds since
        * the system boot           *
        * ********************************************************************************************/
-      for (int i = 0; i < 22; i++) linestream >> time;
-    } else {
+      for (int i = 0; i < 22; i++){
+        linestream >> time;}
+    }
+    else
+    {
       time = "-1"; /* for debug */
     }
   }

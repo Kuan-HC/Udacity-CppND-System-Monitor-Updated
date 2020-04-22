@@ -34,22 +34,22 @@ float Process::CpuUtilization() {
       std::cout << "total cpu usage: " << usage << std::endl;
  *
  * *******************************************************************************************************************************************/
-  long now_active = LinuxParser::ActiveJiffies(pid_num);
-  long now_total = LinuxParser::Jiffies();
-  float Cpu_Utilization = 0.0f;
+  // long now_active = LinuxParser::ActiveJiffies(pid_num);
+  // long now_total = LinuxParser::Jiffies();
+  // float Cpu_Utilization = 0.0f;
 
-  if ((now_total - prev_total) == 0) {
-    Cpu_Utilization = 0.0f;
-  } else {
-    Cpu_Utilization =
-        static_cast<float>(now_active - prev_active) / (now_total - prev_total);
-  }
-  /* update previous total, idle value and private number cpu_load  */
-  prev_active = now_active;
-  prev_total = now_total;
-  cpu_load = Cpu_Utilization;
+  // if ((now_total - prev_total) == 0) {
+  //   Cpu_Utilization = 0.0f;
+  // } else {
+  //   Cpu_Utilization =
+  //       static_cast<float>(now_active - prev_active) / (now_total - prev_total);
+  // }
+  // /* update previous total, idle value and private number cpu_load  */
+  // prev_active = now_active;
+  // prev_total = now_total;
+  // cpu_load = Cpu_Utilization;
 
-  return Cpu_Utilization;
+  return LinuxParser::CpuUtilization();
 }
 
 // TODO: (Done) Return the command that generated this process
