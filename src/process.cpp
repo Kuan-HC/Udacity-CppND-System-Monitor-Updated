@@ -26,7 +26,7 @@ int Process::Pid() { return pid_num; }
 // TODO: (Done) Return this process's CPU utilization
 float Process::CpuUtilization() {  
   string line;
-  float resulo = 0.0f;
+  float result = 0.0f;
   std::ifstream stream(LinuxParser::kProcDirectory + to_string(pid_num) + LinuxParser::kStatFilename);
   if (stream.is_open()) {
   std::getline(stream, line); // file contains only one line    
@@ -37,12 +37,12 @@ float Process::CpuUtilization() {
   float stime = stof(line_content[14]);
   float cutime = stof(line_content[15]);
   float cstime = stof(line_content[16]);
-  float starttime = stof(line_content[222]);   /* was 21 */
+  float starttime = stof(line_content[22]);   /* was 21 */
   float uptime = LinuxParser::UpTime();
   float freq = sysconf(_SC_CLK_TCK);
   float total_time = utime + stime + cutime + cstime;
   float seconds = uptime - (starttime / freq);
-  float result = 100.0 * ((total_time / freq) / seconds);
+  result = 100.0 * ((total_time / freq) / seconds);
   }
   return result;
 }
