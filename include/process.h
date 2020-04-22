@@ -19,10 +19,8 @@ class Process {
 
   // TODO: Declare any necessary private members
  private:
-  int pid_num{0};
-  int cpu_load{0};
-  long prev_total{0};
-  long prev_active{0};
+  int pid_num = 0;
+  float cpu_load = 0.0f;
 };
 
 #endif

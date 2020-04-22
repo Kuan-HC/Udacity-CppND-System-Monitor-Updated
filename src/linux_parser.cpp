@@ -239,6 +239,7 @@ long LinuxParser::UpTime(int pid) {
 * Time when the process started, measured in clock ticks           *
 * ********************************************************************************************/
   string line, time;
+  float seconds = 0.0f;
   
   std::ifstream stream(kProcDirectory + to_string(pid) + kStatFilename);
     if (stream.is_open()) {
@@ -249,7 +250,7 @@ long LinuxParser::UpTime(int pid) {
 
       float starttime = stof(line_content[21]);
       float freq = sysconf(_SC_CLK_TCK);
-      float seconds = (starttime / freq);
+      seconds = (starttime / freq);
     }
   return seconds;
 }

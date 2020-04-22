@@ -15,8 +15,6 @@ using std::vector;
 
 Process::Process(int pid) {
   pid_num = pid;  
-  prev_active = LinuxParser::ActiveJiffies(pid_num);
-  prev_total = LinuxParser::Jiffies();
   cpu_load = CpuUtilization();
 }
 
@@ -38,7 +36,7 @@ float Process::CpuUtilization() {
   string line;
  
   std::ifstream stream(LinuxParser::kProcDirectory + to_string(pid_num) + LinuxParser::kStatFilename);
-  if (stream.is_open()) {
+  
   std::getline(stream, line); // file contains only one line    
   std::istringstream buffer(line);
   std::istream_iterator<string> beginning(buffer), end;
@@ -54,8 +52,8 @@ float Process::CpuUtilization() {
 
   float total_time = utime + stime + cutime + cstime;
   float seconds = uptime - (starttime / freq);
-  cpu_load = 100.0 * ((total_time / freq) / seconds);
-  }
+  cpu_load = (total_time / freq )/ seconds;
+  
   return cpu_load;
 }
 
@@ -72,7 +70,8 @@ string Process::User() {
 }
 
 // TODO: (Done) Return the age of this process (in seconds)
-long int Process::UpTime() { return LinuxParser::UpTime(pid_num); }
+long int Process::UpTime() 
+{ return LinuxParser::UpTime(pid_num); }
 
 // TODO: (Done) Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function
