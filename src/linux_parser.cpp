@@ -240,16 +240,20 @@ long LinuxParser::UpTime(int pid) {
 * the system boot           *
 * ********************************************************************************************/
   string line, time;
-  long output =0U;
+  
   std::ifstream stream(kProcDirectory + to_string(pid) + kStatFilename);
     if (stream.is_open()) {
       std::getline(stream, line); // file contains only one line    
       std::istringstream buffer(line);
       std::istream_iterator<string> beginning(buffer), end;
       std::vector<string> line_content(beginning, end);
-      output= stof(line_content[21]);
+
+      float starttime = stof(line_content[21]);
+      float freq = sysconf(_SC_CLK_TCK);
+      float seconds = (starttime / freq
+      
     }
-  return output;
+  return seconds;
 }
 
 /* Helpler Function */

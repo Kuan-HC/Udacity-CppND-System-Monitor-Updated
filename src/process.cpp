@@ -14,16 +14,26 @@ using std::to_string;
 using std::vector;
 
 Process::Process(int pid) {
-  pid_num = pid;
-  cpu_load = CpuUtilization();
+  pid_num = pid;  
   prev_active = LinuxParser::ActiveJiffies(pid_num);
   prev_total = LinuxParser::Jiffies();
+  cpu_load = CpuUtilization();
 }
 
 // TODO: (Done) Return this process's ID
 int Process::Pid() { return pid_num; }
 
 // TODO: (Done) Return this process's CPU utilization
+/****************************************************************************************************************************************
+ * https://stackoverflow.com/questions/16726779/how-do-i-get-the-total-cpu-usage-of-an-application-from-proc-pid-stat/16736599#16736599
+ * 
+ * #14 utime - CPU time spent in user code, measured in clock ticks
+ * #15 stime - CPU time spent in kernel code, measured in clock ticks
+ * #16 cutime - Waited-for children's CPU time spent in user code (in clock ticks)
+ * #17 cstime - Waited-for children's CPU time spent in kernel code (in clock ticks)
+ * #22 starttime - Time when the process started, measured in clock ticks 
+ * ****************************************************************************************************************************************/
+
 float Process::CpuUtilization() {  
   string line;
   float result = 0.0f;
@@ -34,7 +44,7 @@ float Process::CpuUtilization() {
   std::istream_iterator<string> beginning(buffer), end;
   std::vector<string> line_content(beginning, end);
 
-  float utime = stof(line_content[13;//]LinuxParser::UpTime(pid_num);
+  float utime = stof(line_content[13]);//]LinuxParser::UpTime(pid_num);
   float stime = stof(line_content[14]);
   float cutime = stof(line_content[15]);
   float cstime = stof(line_content[16]);
