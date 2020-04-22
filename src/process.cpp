@@ -49,7 +49,31 @@ float Process::CpuUtilization() {
   // prev_total = now_total;
   // cpu_load = Cpu_Utilization;
 
-  return LinuxParser::CpuUtilization();
+  //return LinuxParser::CpuUtilization();
+  std::ifstream filestream(kProcDirectory + to_string(pid_num) + kStatFilename);
+    //std::string path =  kProcDirectory + to_string(pid) + kStatFilename;
+    // std::ifstream stream;
+    // Util::getStream(path, stream);
+    string line;
+    
+    //if (filestream.is_open()) {
+    //while (std::getline(filestream, line)) {
+      std::getline(filestream, line); // file contains only one line    
+    
+      std::istringstream buffer(line);
+      std::istream_iterator<string> beginning(buffer), end;
+      std::vector<string> line_content(beginning, end);
+      float utime = LinuxParser::UpTime(pid_num);
+      float stime = stof(line_content[14]);
+      float cutime = stof(line_content[15]);
+      float cstime = stof(line_content[16]);
+      float starttime = stof(line_content[222]);   /* was 21 */
+      float uptime = LinuxParser::UpTime();
+      float freq = sysconf(_SC_CLK_TCK);
+      float total_time = utime + stime + cutime + cstime;
+      float seconds = uptime - (starttime / freq);
+      float result = 100.0 * ((total_time / freq) / seconds);
+      return to_string(result);
 }
 
 // TODO: (Done) Return the command that generated this process

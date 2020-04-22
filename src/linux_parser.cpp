@@ -153,30 +153,30 @@ long LinuxParser::IdleJiffies() {
 vector<string> LinuxParser::CpuUtilization()
 { 
     string line;
-    std::ifstream filestream(kProcDirectory + to_string(pid) + kStatFilename);
-    //std::string path =  kProcDirectory + to_string(pid) + kStatFilename;
-    // std::ifstream stream;
-    // Util::getStream(path, stream);
-    string line;
+    // std::ifstream filestream(kProcDirectory + to_string(pid) + kStatFilename);
+    // //std::string path =  kProcDirectory + to_string(pid) + kStatFilename;
+    // // std::ifstream stream;
+    // // Util::getStream(path, stream);
+    // string line;
     
-    if (filestream.is_open()) {
-    //while (std::getline(filestream, line)) {
-      std::getline(filestream, line); // file contains only one line    
+    // //if (filestream.is_open()) {
+    // //while (std::getline(filestream, line)) {
+    //   std::getline(filestream, line); // file contains only one line    
     
-      std::istringstream buffer(line);
-      std::istream_iterator<string> beginning(buffer), end;
-      std::vector<string> line_content(beginning, end);
-      float utime = LinuxParser::UpTime(pid);
-      float stime = stof(line_content[14]);
-      float cutime = stof(line_content[15]);
-      float cstime = stof(line_content[16]);
-      float starttime = stof(line_content[222]);   /* was 21 */
-      float uptime = LinuxParser::UpTime();
-      float freq = sysconf(_SC_CLK_TCK);
-      float total_time = utime + stime + cutime + cstime;
-      float seconds = uptime - (starttime / freq);
-      float result = 100.0 * ((total_time / freq) / seconds);
-      return (result);
+    //   std::istringstream buffer(line);
+    //   std::istream_iterator<string> beginning(buffer), end;
+    //   std::vector<string> line_content(beginning, end);
+    //   float utime = LinuxParser::UpTime(pid);
+    //   float stime = stof(line_content[14]);
+    //   float cutime = stof(line_content[15]);
+    //   float cstime = stof(line_content[16]);
+    //   float starttime = stof(line_content[222]);   /* was 21 */
+    //   float uptime = LinuxParser::UpTime();
+    //   float freq = sysconf(_SC_CLK_TCK);
+    //   float total_time = utime + stime + cutime + cstime;
+    //   float seconds = uptime - (starttime / freq);
+    //   float result = 100.0 * ((total_time / freq) / seconds);
+       return {};
   /****************************************************************************************************************************************
    * https://stackoverflow.com/questions/16726779/how-do-i-get-the-total-cpu-usage-of-an-application-from-proc-pid-stat/16736599#16736599
    * 
