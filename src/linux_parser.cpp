@@ -92,12 +92,15 @@ float LinuxParser::MemoryUtilization() {
 // TODO: (Done) Read and return the system uptime
 long LinuxParser::UpTime() {
   string line;
-  long time;
+  long time = 0;
   std::ifstream stream(kProcDirectory + kUptimeFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
     std::istringstream linestream(line);
-    linestream >> time;
+    std::istream_iterator<string> beginning(linestream), end;
+    std::vector<string> line_content(beginning, end);
+    time = stof(line_content[0]);
+    
   }
   return time;
 }
@@ -230,24 +233,23 @@ string LinuxParser::User(int UID) {
 // TODO: (Done) Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::UpTime(int pid) {
-  string line, time;
-  std::ifstream filestream(kProcDirectory + to_string(pid) + kStatFilename);
-  if (filestream.is_open()) {
-    if (getline(filestream, line)) {
-      std::istringstream linestream(line);
 
-      /**********************************************************************************************
-       * https://web.archive.org/web/20130302063336/http://www.lindevdoc.org/wiki//proc/pid/stat
-       * * NO.22 time when the process started, measured in nanoseconds since
-       * the system boot           *
-       * ********************************************************************************************/
-      for (int i = 0; i < 22; i++){
-        linestream >> time;}
+/**********************************************************************************************
+* https://web.archive.org/web/20130302063336/http://www.lindevdoc.org/wiki//proc/pid/stat
+* * NO.22 time when the process started, measured in nanoseconds since
+* the system boot           *
+* ********************************************************************************************/
+  string line, time;
+  long output =0U;
+  std::ifstream stream(kProcDirectory + to_string(pid) + kStatFilename);
+    if (stream.is_open()) {
+      std::getline(stream, line); // file contains only one line    
+      std::istringstream buffer(line);
+      std::istream_iterator<string> beginning(buffer), end;
+      std::vector<string> line_content(beginning, end);
+      output= stof(line_content[21]);
     }
-    else
-    { time = "-1";} /* for debug */
-  }
-  return stol(time);
+  return output;
 }
 
 /* Helpler Function */

@@ -33,11 +33,13 @@ float Process::CpuUtilization() {
   std::istringstream buffer(line);
   std::istream_iterator<string> beginning(buffer), end;
   std::vector<string> line_content(beginning, end);
-  float utime = LinuxParser::UpTime(pid_num);
+
+  float utime = stof(line_content[13;//]LinuxParser::UpTime(pid_num);
   float stime = stof(line_content[14]);
   float cutime = stof(line_content[15]);
   float cstime = stof(line_content[16]);
-  float starttime = stof(line_content[22]);   /* was 21 */
+  float starttime = stof(line_content[21]);   
+
   float uptime = LinuxParser::UpTime();
   float freq = sysconf(_SC_CLK_TCK);
   float total_time = utime + stime + cutime + cstime;
