@@ -73,7 +73,8 @@ float Process::CpuUtilization() {
       float total_time = utime + stime + cutime + cstime;
       float seconds = uptime - (starttime / freq);
       float result = 100.0 * ((total_time / freq) / seconds);
-      return to_string(result);
+      
+      return result;
 }
 
 // TODO: (Done) Return the command that generated this process
