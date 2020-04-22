@@ -82,9 +82,7 @@ float LinuxParser::MemoryUtilization() {
           total = value;
         } else if (mem_key == "MemFree:") {
           free = value;
-        } else {
-          /* do nothing */
-        }
+        } else { /* do nothing */ }
       }
     }
   }
@@ -203,8 +201,8 @@ int LinuxParser::Uid(int pid) {
     while (std::getline(filestream, line)) {
       std::istringstream linestream(line);
       linestream >> key >> value;
-      if (key == "Uid:") 
-        return value;
+      if (key == "Uid:") {
+        return value;}
     }
   }
   return 0U;
@@ -247,12 +245,9 @@ long LinuxParser::UpTime(int pid) {
         linestream >> time;}
     }
     else
-    {
-      time = "-1"; /* for debug */
-    }
+    { time = "-1";} /* for debug */
   }
   return stol(time);
-  ;
 }
 
 /* Helpler Function */
@@ -285,11 +280,9 @@ std::vector<long> LinuxParser::Jiffies_Arr() {
       std::istringstream linestream(line);
       while (linestream >> key) {
         if (key == "cpu") {
-          linestream >> value_1 >> value_2 >> value_3 >> value_4 >> value_5 >>
-              value_6 >> value_7 >> value_8 >> value_9 >> value_10;
+          linestream >> value_1 >> value_2 >> value_3 >> value_4 >> value_5 >> value_6 >> value_7 >> value_8 >> value_9 >> value_10;
+          tmp_cpu = {value_1, value_2, value_3, value_4, value_5, value_6, value_7, value_8, value_9, value_10};
 
-          tmp_cpu = {value_1, value_2, value_3, value_4, value_5,
-                     value_6, value_7, value_8, value_9, value_10};
           return tmp_cpu;
         }
       }

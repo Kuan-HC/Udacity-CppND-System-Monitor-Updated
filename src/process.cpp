@@ -23,58 +23,26 @@ Process::Process(int pid) {
 int Process::Pid() { return pid_num; }
 
 // TODO: (Done) Return this process's CPU utilization
-float Process::CpuUtilization() {
-  /*******************************************************************************************************************************************
-       https://stackoverflow.com/questions/3017162/how-to-get-total-cpu-usage-in-linux-using-c/3017438#3017438
-
-      ACTIVE_TIME = ActiveTimeTotal() - previous ActiveTimeTotal();
-      IDLE_TIME   = GetIdleTimeTotal() - previous IdleTimeTotal();
-      TOTAL_TIME  = ACTIVE_TIME + IDLE_TIME;
-      int usage = 100.f * ACTIVE_TIME / TOTAL_TIME;
-      std::cout << "total cpu usage: " << usage << std::endl;
- *
- * *******************************************************************************************************************************************/
-  // long now_active = LinuxParser::ActiveJiffies(pid_num);
-  // long now_total = LinuxParser::Jiffies();
-  // float Cpu_Utilization = 0.0f;
-
-  // if ((now_total - prev_total) == 0) {
-  //   Cpu_Utilization = 0.0f;
-  // } else {
-  //   Cpu_Utilization =
-  //       static_cast<float>(now_active - prev_active) / (now_total - prev_total);
-  // }
-  // /* update previous total, idle value and private number cpu_load  */
-  // prev_active = now_active;
-  // prev_total = now_total;
-  // cpu_load = Cpu_Utilization;
-
-  //return LinuxParser::CpuUtilization();
-  std::ifstream filestream(kProcDirectory + to_string(pid_num) + kStatFilename);
-    //std::string path =  kProcDirectory + to_string(pid) + kStatFilename;
-    // std::ifstream stream;
-    // Util::getStream(path, stream);
-    string line;
+float Process::CpuUtilization() {  
+  string line;
+  std::ifstream filestream(LinuxParser::kProcDirectory + to_string(pid_num) + LinuxParser::kStatFilename);
+  std::getline(filestream, line); // file contains only one line    
     
-    //if (filestream.is_open()) {
-    //while (std::getline(filestream, line)) {
-      std::getline(filestream, line); // file contains only one line    
-    
-      std::istringstream buffer(line);
-      std::istream_iterator<string> beginning(buffer), end;
-      std::vector<string> line_content(beginning, end);
-      float utime = LinuxParser::UpTime(pid_num);
-      float stime = stof(line_content[14]);
-      float cutime = stof(line_content[15]);
-      float cstime = stof(line_content[16]);
-      float starttime = stof(line_content[222]);   /* was 21 */
-      float uptime = LinuxParser::UpTime();
-      float freq = sysconf(_SC_CLK_TCK);
-      float total_time = utime + stime + cutime + cstime;
-      float seconds = uptime - (starttime / freq);
-      float result = 100.0 * ((total_time / freq) / seconds);
+  std::istringstream buffer(line);
+  std::istream_iterator<string> beginning(buffer), end;
+  std::vector<string> line_content(beginning, end);
+  float utime = LinuxParser::UpTime(pid_num);
+  float stime = stof(line_content[14]);
+  float cutime = stof(line_content[15]);
+  float cstime = stof(line_content[16]);
+  float starttime = stof(line_content[222]);   /* was 21 */
+  float uptime = LinuxParser::UpTime();
+  float freq = sysconf(_SC_CLK_TCK);
+  float total_time = utime + stime + cutime + cstime;
+  float seconds = uptime - (starttime / freq);
+  float result = 100.0 * ((total_time / freq) / seconds);
       
-      return result;
+  return result;
 }
 
 // TODO: (Done) Return the command that generated this process
