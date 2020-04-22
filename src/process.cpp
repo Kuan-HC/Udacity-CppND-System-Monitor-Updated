@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <fstream>
 
 #include "linux_parser.h"
 
@@ -25,9 +26,10 @@ int Process::Pid() { return pid_num; }
 // TODO: (Done) Return this process's CPU utilization
 float Process::CpuUtilization() {  
   string line;
-  std::ifstream filestream(LinuxParser::kProcDirectory + to_string(pid_num) + LinuxParser::kStatFilename);
-  std::getline(filestream, line); // file contains only one line    
-    
+  float resulo = 0.0f;
+  std::ifstream stream(LinuxParser::kProcDirectory + to_string(pid_num) + LinuxParser::kStatFilename);
+  if (stream.is_open()) {
+  std::getline(stream, line); // file contains only one line    
   std::istringstream buffer(line);
   std::istream_iterator<string> beginning(buffer), end;
   std::vector<string> line_content(beginning, end);
@@ -41,7 +43,7 @@ float Process::CpuUtilization() {
   float total_time = utime + stime + cutime + cstime;
   float seconds = uptime - (starttime / freq);
   float result = 100.0 * ((total_time / freq) / seconds);
-      
+  }
   return result;
 }
 
