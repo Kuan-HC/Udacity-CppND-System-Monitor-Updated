@@ -52,7 +52,7 @@ float Process::CpuUtilization() {
 
   float total_time = utime + stime + cutime + cstime;
   float seconds = uptime - (starttime / freq);
-  cpu_load = (total_time / freq )/ seconds;
+  cpu_load = (total_time / freq ) / seconds;
   
   return cpu_load;
 }
