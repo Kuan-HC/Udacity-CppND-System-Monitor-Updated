@@ -236,8 +236,7 @@ long LinuxParser::UpTime(int pid) {
 
 /**********************************************************************************************
 * https://web.archive.org/web/20130302063336/http://www.lindevdoc.org/wiki//proc/pid/stat
-* * NO.22 time when the process started, measured in nanoseconds since
-* the system boot           *
+* Time when the process started, measured in clock ticks           *
 * ********************************************************************************************/
   string line, time;
   
@@ -250,8 +249,7 @@ long LinuxParser::UpTime(int pid) {
 
       float starttime = stof(line_content[21]);
       float freq = sysconf(_SC_CLK_TCK);
-      float seconds = (starttime / freq
-      
+      float seconds = (starttime / freq);
     }
   return seconds;
 }
